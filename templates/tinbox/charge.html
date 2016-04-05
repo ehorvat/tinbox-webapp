@@ -1,0 +1,78 @@
+
+{% extends "tinbox/global/base.html" %}
+{% load carton_tags %}
+{% block title %}Log In{% endblock %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+.table {
+  color: #000;
+  max-width: 880px;
+  margin: 0 auto;
+  margin-top: 45px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+form {
+  max-width: 240px;
+margin: 0 auto;
+width: 100%;
+}
+table tr td{
+  text-align: left;
+}
+@media (max-width: 400px) {
+  table tr {
+    font-size: 12px;
+  }
+}
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'index_css.css' %}" />
+{% block nav %}{% endblock %}
+
+  {% include 'tinbox/global/navbar.html' %}
+
+<div id="order_row" class="row" style="padding-bottom: 100px; padding-top: 45px;">
+   <div class="content_row">
+     <h1>Checkout</h1>
+     <p>Review your items and then provide your credit card information below</p>
+     {% get_cart as cart %}
+
+         <table class="table">
+         <tr>
+             <th>Product</th>
+             <th>Quantity</th>
+             <th>Finish</th>
+             <th>Price</th>
+         </tr>
+         {% for item in cart.items %}
+         <tr>
+             <td>{{ item.product.product.product_dimensions }} {{ item.product.product.category.category_name }}</td>
+             <td>{{ item.product.quantity.quantity }}</td>
+             <td>{{ item.product.finish.finish }}</td>
+             <td>${{ item.subtotal }}</td>
+         </tr>
+             {% endfor %}
+         </table>
+         <p>${{ cart.total }} + <strong id="t_cost">${{ turnaround_cost }}</strong> shipping fee</p>
+         <p>Total: <strong id="f_cost">${{ cart.total|add:turnaround_cost }}.00</strong> </p>
+         <form method="POST" action="{% url 'shopping-cart-charge' %}">
+           {% csrf_token %}
+           {{ form|crispy }}
+           <a href="{% url 'shopping-cart-show' %}" class="btn btn-danger">Cancel</a>
+           <input type="submit" value="Place Order" class="btn btn-primary">
+       </form>
+   </div>
+</div>
+<script type="text/javascript">
+$("#id_shipping").on('change', function() {
+  var cart_total = "{{ cart.total }}";
+  var new_shipping_cost = $(this).val();
+  var new_total = parseFloat(cart_total) + parseFloat(new_shipping_cost);
+  $("#t_cost").text("$"+new_shipping_cost);
+  $("#f_cost").text("$"+new_total.toFixed(2));
+});
+</script>
+{% endblock %}

@@ -15,8 +15,23 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from website import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^tinbox/', include('tinbox.urls', namespace="tinbox")),
+    #url(r'^$', include('tinbox.urls', namespace="tinbox")),
+    url(r'^$', views.index, name='index'),
+    url(r'^accounts/register/', 'accounts.views.register', name="registration_register"),
+    url(r'^dashboard/', 'accounts.views.dashboard', name="dashboard"),
+    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^product/', include('catalog.urls', namespace="product")),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^shopping/', include('shopping.urls')),
+    url(r'^payments/', include("payments.urls")),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

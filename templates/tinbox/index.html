@@ -1,0 +1,88 @@
+{% extends "tinbox/global/base.html" %}
+{% block nav %}{% endblock %}
+{% load staticfiles %}
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <h1>Navbar example</h1>
+  <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+  </p>
+</div>
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="/static/index_css.css" />
+{% include 'tinbox/global/navbar.html' %}
+
+<div id="image-container">
+<h2>Online Print Services</h2>
+</div>
+<div id="header_row" class="row" style="padding-bottom: 225px; padding-top: 45px;">
+  <div class="content_row">
+  <p id="intro-text">TINbox Solutions offers a myriad of printing services to handle whatever your project requires.  Large or small format, indoor or out, high volume or limited run, we can make it happen.</p>
+
+  <div id="product_explorer" class="grid mobile-stack">
+    <div id="product_explorer_controls">
+      <input type="text" placeholder="Search by dimensions or name" class="form-control" id="product_search" />
+      <select id="product_filter" class="form-control">
+        <option data-id="all" >Product type...</option>
+        {% for c in categories %}
+          <option class='has-sub' data-id="{{ c.id }}">{{ c.category_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  <div id="products">
+    {% for c in categories %}
+    <div class="subproducts" data-id="{{ c.id }}">
+        {% for p in c.product_set.all %}
+        <a class="tbx-white-panel" href="{% url 'shopping-cart-add' p.id %}" style="text-decoration: none; background-image: url('media/{{ p.product_image }}')";>
+          <p>{{ p.product_dimensions }} {{ c.category_name }}</p>
+       </a>
+        {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+</div>
+<script>
+
+var productFilter = $("#product_filter");
+var productSearch = $("#product_search");
+var subproducts = $(".subproducts");
+
+productFilter.change(function(){
+  productSearch.val("");
+  var selection = $(this).find(':selected').attr('data-id');
+  unHideAllProducts();
+  if(selection != "all") {
+    subproducts.each(function(){
+      var id = $(this).attr("data-id");
+      if(selection != id) {
+        $(this).addClass("hide");
+      }
+    });
+  }
+});
+
+productSearch.on('input',function(e){
+    var input = productSearch.val();
+    unHideAllProducts();
+    subproducts.each(function(){
+      $(this).find("a p").each(function(){
+        if($(this).text().indexOf(input) >= 0){
+          $(this).parent().removeClass("hide");
+        } else {
+          $(this).parent().addClass("hide");
+        }
+      })
+    });
+});
+
+function unHideAllProducts() {
+  subproducts.children().removeClass("hide");
+  subproducts.removeClass("hide")
+}
+
+</script>
+{% endblock %}

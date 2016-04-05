@@ -1,0 +1,25 @@
+
+{% extends "tinbox/global/base.html" %}
+{% load carton_tags %}
+{% block title %}Log In{% endblock %}
+{% load staticfiles %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'index_css.css' %}" />
+{% block nav %}{% endblock %}
+
+<div id="image-container">
+  {% include 'tinbox/global/navbar.html' %}
+<h2>Online Print Services</h2>
+</div>
+<div id="order_row" class="row" style="padding-bottom: 100px; padding-top: 45px;">
+   <div class="content_row">
+
+     <h1>Thank you for your order!</h1>
+
+    <h2>Your card was successfully processed</h2>
+
+     <p>Please email all graphics to: <a href="mailto:jvita@tinboxsolutions.com">jvita@tinboxsolutions.com</a>
+
+   </div>
+</div>
+{% endblock %}

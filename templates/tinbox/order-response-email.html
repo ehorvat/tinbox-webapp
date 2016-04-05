@@ -1,0 +1,25 @@
+<p>Greetings {{ name }}, </br> Thank you for your order!</p>
+
+<strong>Below are the order details:</p>
+<table style="color: #000; max-width: 880px; margin: 0 auto; margin-top: 45px; width: 100%; margin-bottom: 20px; text-align: left;">
+<tr>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Product</th>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Quantity</th>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Finish</th>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Color</th>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Rounded</th>
+    <th style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd;">Price</th>
+</tr>
+{% for item in cart.items %}
+<tr>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">{{ item.product.product.product_dimensions }} {{ item.product.product.category.category_name }}</td>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">{{ item.product.quantity.quantity }}</td>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">{{ item.product.finish.finish }}</td>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">{{ item.product.color.color }}</td>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">{% if item.product.rounded %}Yes{% else %}No{% endif %}</td>
+    <td style="padding: 8px; line-height: 1.42857143; vertical-align: top; border-top: 1px solid #ddd; font-weight: 100;">${{ item.subtotal }}</td>
+</tr>
+    {% endfor %}
+</table>
+<p style="font-size: 18px; font-weight: bold;">Total: ${{ total }} + ${{ shipping_cost }} shipping cost = ${{ total|add:shipping_cost }}.00</p>
+<p>Please email your graphics or questions to <a href="mailto:jvita@tinboxsolutions.com">jvita@tinboxsolutions.com</a>. </p>

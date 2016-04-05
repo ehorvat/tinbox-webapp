@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <style>
+    #main-footer {
+      padding: 117px 0 80px;
+      background-color: #dddddd;
+    }
+    /*------------------------------------------------*/
+/*---------------------[FOOTER]-------------------*/
+/*------------------------------------------------*/
+  .ktext { color:white; }
+	#main-footer a { color: #fff; text-decoration: none; }
+	#main-footer a:hover { color: rgba(255,255,255,0.9); }
+	.footer-widget { float: left; width: 277px; margin-right: 64px; color: #fff; }
+		.fwidget, #footer-widgets { margin-bottom: 50px; }
+	.last { margin-right: 0 !important; }
+		#footer-logo { margin-bottom: 10px; font-weight: 100; font-size: 48px; }
+			#footer-logo a { text-decoration: none; color: #fff; }
+		h4.widgettitle { padding-bottom: 11px; color: #fff; font-weight: 800; }
+		#footer-info { text-align: center; color: #fff; }
+			#footer-info a { color:#fff; }
+      ul { padding-left: 0; }
+		.footer-widget li, .widget li { padding: 9px 0 9px 15px; position: relative; list-style-type: none; }
+			/*.footer-widget li:before, .widget li:before { content: ''; position: absolute; top: 14px; left: 0; border: 3px solid transparent; border-left-color: #C24C4C; }*/
+				.footer-widget li ul, .widget li ul { margin: 15px 0 0; }
+
+    </style>
+    <title>Tinbox Solutions</title>
+    {% include 'tinbox/global/head_css.html' %}
+  </head>
+
+  <body>
+    <div id="tbx_content">
+      <div id="tbx_main">
+        {% block nav %}
+        {% include 'tinbox/global/navbar.html' %}
+        {% endblock %}
+        {% block content %}{% endblock %}
+        {% block account_home_content %}{% endblock %}
+        {% block order_form %}{% endblock %}
+        {% block login_form %}{% endblock %}
+        {% block footer %}{% include 'tinbox/global/footer.html' %}{% endblock %}
+      </div>
+    </div>
+        {% block register_form %}{% endblock %}
+      </div> <!-- /container -->
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  </body>
+</html>

@@ -20,7 +20,6 @@ from django.conf import settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -42,10 +41,19 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tinbox',
+    'django.contrib.sites',
+    'djangosecure',
+    'sslserver',
+    'registration',
+    'crispy_forms',
+    'carton',
+    'shopping',
+    'payments',
+    'catalog',
+    'customs',
+    'accounts',
     'twitter_bootstrap',
     'jquery',
-    'static_precompiler',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,14 +65,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'djangosecure.middleware.SecurityMiddleware',
 )
+
 
 ROOT_URLCONF = 'website.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.static',
             ],
         },
     },
@@ -84,8 +95,12 @@ WSGI_APPLICATION = 'website.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tinbox',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
@@ -103,14 +118,61 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Security
+#SECURE_SSL_REDIRECT = True
+#SECURE_HSTS_SECONDS = 10
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_FRAME_DENY = True
+#SECURE_CONTENT_TYPE_NOSNIFF = True
+#SECURE_BROWSER_XSS_FILTER = True
+#SESSION_COOKIE_HTTPONLY = True
+#SESSION_COOKIE_SECURE = True
+
+SSLIFY_DISABLE_FOR_REQUEST = [
+    lambda request: request.get_full_path().startswith('/tinbox')
+]
+
+CART_PRODUCT_MODEL = 'shopping.models.CartItem'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/static/'
+
+STATICFILES_DIRS = ( os.path.join('static'), )
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/Users/erichorvat/Developer/VMs/pythonvm/tinbox-webapp/media/'
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'eric.horvat@gmail.com'
 EMAIL_HOST_PASSWORD = 'Halfnelson7!'
+
+#crispy form tag settings
+CRISPY_TEMPLATE_PACK = "bootstrap3"
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/dashboard/'
+
+# Cookie name. This can be whatever you want.
+SESSION_COOKIE_NAME = 'sessionid'
+# The module to store sessions data.
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# Age of cookie, in seconds (default: 2 weeks).
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2
+# Whether a user's session cookie expires when the Web browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# Whether the session cookie should be secure (https:// only).
+SESSION_COOKIE_SECURE = True
+
+
+STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "pk_test_VwRz6EBTqbIAtZr3Jq8ZFgqm")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "sk_test_e6xrrB2BPiSeO0CPQvWIWZsN")
+
+SECURE_SSL_REDIRECT = False

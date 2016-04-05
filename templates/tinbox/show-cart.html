@@ -1,0 +1,112 @@
+{% extends "tinbox/global/base.html" %}
+{% load carton_tags %}
+{% block title %}Log In{% endblock %}
+{% load staticfiles %}
+{% block content %}
+<style>
+.table {
+  color: #000;
+  max-width: 880px;
+  margin: 0 auto;
+  margin-top: 45px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+#shopping-cart-forms {
+  max-width: 880px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#option-forms {
+  float: left;
+}
+
+#option-forms form {
+  display: inline-block;
+}
+
+#checkout-form {
+  float: right;
+}
+
+#checkout-form form {
+  display: inline-block;
+}
+
+table tr td{
+  text-align: left;
+}
+@media (max-width: 400px) {
+  table tr {
+    font-size: 12px;
+  }
+}
+
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'index_css.css' %}" />
+{% block nav %}{% endblock %}
+
+
+  {% include 'tinbox/global/navbar.html' %}
+
+<div id="order_row" class="row" style="padding-bottom: 100px; padding-top: 45px;">
+   <div class="content_row">
+
+     {% if empty %}
+     <div class="alert alert-danger" role="alert" style=" max-width: 500px; margin: 0 auto; color: #a94442 !important;">
+       <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+       Your shopping cart is empty!
+     </div>
+   {% endif %}
+
+     <h1>Shopping Cart</h1>
+
+     {% get_cart as cart %}
+
+         <table class="table">
+         <tr>
+             <th>Product</th>
+             <th>Quantity</th>
+             <th>Finish</th>
+             <th>Rounded</th>
+             <th>Price</th>
+             <th></th>
+         </tr>
+         {% for item in cart.items %}
+         <tr>
+             <td>{{ item.product.product.product_dimensions }} {{ item.product.product.category.category_name }}</td>
+             <td>{{ item.product.quantity.quantity }}</td>
+             <td>{{ item.product.finish.finish }}</td>
+             <td>{% if item.product.rounded == True %}Yes{% else %}No{% endif %}</td>
+             <td>${{ item.subtotal }}</td>
+             <td><a href="{% url 'shopping-cart-remove' %}?id={{ forloop.counter0 }}"><i class="fa fa-remove" style="color: #d9534f;"></i></td>
+         </tr>
+             {% endfor %}
+         </table>
+
+         <p>Total: ${{ cart.total }}</p>
+         {% if cart.items %}
+         <div id="shopping-cart-forms">
+         <div id="option-forms">
+         <form method="POST" action="{% url 'shopping-cart-clear' %}">
+           {% csrf_token %}
+           <button class="btn btn-warning">Clear Cart</button>
+        </form>
+        <a href="/" class="btn btn-success">
+          Keep Shopping
+        </a>
+        </div>
+        <div id="checkout-form">
+        <form method="GET" action="{% url 'shopping-cart-charge' %}">
+          {% csrf_token %}
+         <button class="btn btn-success">Checkout</button>
+       </form>
+     </div>
+   </div>
+       {% else %}
+       <p>Your cart is empty! Click <a href="/">here</a> to start shopping!</a>
+       {% endif %}
+   </div>
+</div>
+{% endblock %}

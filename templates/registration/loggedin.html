@@ -1,0 +1,60 @@
+{% extends "tinbox/global/base.html" %}
+{% load staticfiles %}
+{% block nav %}{% endblock %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<style>
+#welcome_row { color: white; }
+#welcome_row .content_row {  margin-top: 75px; }
+#welcome_row h1 { text-align: center; margin-right: 75px; margin-top: 105px; }
+#weclome_row ul { list-style-type: none;  padding: 0; }
+#welcome_row ul li { display: inline; font-size: 21px; padding-left: 45px;}
+#welcome_row ul li a { color: #fff;  }
+#classes_row { background-color: #f0f0f0; padding-bottom: 85px; padding-top: 55px; }
+#product_list { list-style-type: none;}
+</style>
+<div id="welcome_row" style="height: 330px; background: #067192 no-repeat scroll center center / cover;">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <h1>Hello, {{username}}</h1>
+      <ul style="margin-top: 65px;">
+        <li style="padding-left: 0px;"><a href="/accounts/loggedin/">Home</a></li>
+        <li><a href="/accounts/loggedin/">Account Settings</a></li>
+        <li><a href="/accounts/logout/">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="classes_row">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-2">
+      <h2>My Classes</h2>
+      <a href="{% url 'classes:create' %}" id="add-panel" class="ch-white-panel">
+        <i class="fa fa-plus"></i>
+      </a>
+      {% for c in classes %}
+      {% if c.create_step == 1 %}
+      <a href="{% url 'classes:create_continue' c.id %}" class="ch-white-panel">
+      {% elif c.create_step == 2 %}
+      <a href="{% url 'student:create' c.id %}" class="ch-white-panel">
+      {% elif c.create_step == 3 %}
+      <a href="{% url 'reinforcer:create' c.id %}" class="ch-white-panel">
+      {% endif %}
+        <p>{{ c.name }}</p>
+      </a>
+      {% endfor %}
+      {% if products %}
+      <ul id="product_list">
+        {% for p in products %}
+          <li><a href="/tinbox/accounts/product/{{ p.id }}/detail">{{ p.product_name }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <div class="grid col-1-2">
+      <h2></h2>
+    </div>
+</div>
+</div>
+{% endblock %}

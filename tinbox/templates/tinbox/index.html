@@ -1,10 +1,18 @@
+{% extends "tinbox/global/base.html" %}
 {% load staticfiles %}
-<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-<link rel="stylesheet" type="text/css" href="{% static 'tinbox/global/2015_tinbox_global_css.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'tinbox/index/index_css.css' %}" />
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron">
+  <h1>Navbar example</h1>
+  <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+  <p>
+    <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+  </p>
+</div>
 
-<h1>Tinbox landing page</h1>
-<button type="button" class="btn btn-primary" aria-label="Left Align">
-  THSIE
-</button>
-<a href="accounts/register/">Create an account</a>
-<a href="accounts/login">login</a>
+{% block content %}
+<div id="header_row" class="row">
+  <h1>Tinbox Solutions, Inc.</h1>
+  <h2>Print services landing page</h2>
+</div>
+{% endblock %}

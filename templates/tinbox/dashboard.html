@@ -1,0 +1,43 @@
+{% extends "tinbox/global/base.html" %}
+{% block nav %}{% endblock %}
+{% block title %}Home{% endblock %}
+{% block account_home_content %}
+<style>
+#welcome_row { color: white; }
+#welcome_row .content_row {  margin-top: 75px; }
+#weclome_row ul { list-style-type: none;  padding: 0; }
+#welcome_row ul li { display: inline; font-size: 21px; padding-left: 45px;}
+#welcome_row ul li a { color: #FF3030;  }
+#product_list { list-style-type: none;}
+</style>
+
+<div id="welcome_row" class="row" style="height: 330px; background: transparent url('http://tinboxsolutions.com/wp-content/themes/Vertex/images/bg.jpg') no-repeat scroll center center / cover;">
+  <div class="content_row">
+      <h1>Hello, {{username}}</h1>
+      <ul style="margin-top: 65px;">
+        <li style="padding-left: 0px;"><a href="/dashboard/">Home</a></li>
+        <li><a href="/dashboard/">Account Settings</a></li>
+        <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+      </ul>
+  </div>
+</div>
+<div id="product_row" class="row">
+  <div class="content_row">
+    <div class="grid col-1-2">
+      <h2>All Products</h2>
+      {% if products %}
+      <ul id="product_list">
+        {% for p in products %}
+
+          <li><a href="{% url 'product:detail' p.id %}">{{ p.product_name }}</a></li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    <div class="grid col-1-2">
+      <h2>Featured Products</h2>
+    </div>
+</div>
+</div>
+
+{% endblock %}

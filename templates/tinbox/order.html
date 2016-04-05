@@ -1,0 +1,124 @@
+{% extends "tinbox/global/base.html" %}
+{% block title %}Log In{% endblock %}
+{% block nav %}{% endblock %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'index_css.css' %}" />
+
+  {% include 'tinbox/global/navbar.html' %}
+
+<div id="order_row" class="row" style="padding-bottom: 100px; padding-top: 45px;">
+   <div class="content_row">
+     <h1>Order information</h1>
+     <p>{{ product.product_dimensions }} {{ product.category.category_name }}</p>
+
+     <form method="post" action="{% url 'shopping-cart-add' product.id %}" style="max-width: 500px; margin: 0 auto;" role="form">
+       {% csrf_token %}
+       <input type="hidden" value="{{ product.id }}" name="product">
+       {% if form.errors %}
+      <div class="alert alert-error">
+       <h4>Please fix the following errors</h4>
+       <ul>
+         {% for field in form %}
+           {% if field.errors %}
+             {% for error in field.errors %}
+               <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+             {% endfor %}
+           {% endif %}
+         {% endfor %}
+       </ul>
+       {% if form.non_field_errors %}
+         {{ form.non_field_errors }}
+       {% endif %}
+     </div>
+   {% endif %}
+   {% if quantities %}
+    <div class="form-group">
+      <label>Quantity</label>
+     <select id="quantity_select" name="quantity" class="form-control">
+           {% for q in quantities %}
+            <option value="{{ q.id }}" data-cost="{{ q.quantity_cost }}">{{ q.quantity }} - ${{ q.quantity_cost }}</option>
+           {% endfor %}
+     </select>
+   </div>
+   {% endif %}
+
+      {% if colors %}
+      <div class="form-group">
+        <label>Color</label>
+        <select id="color_select" name="color" class="form-control">
+              {% for c in colors %}
+               <option value="{{ c.id }}" data-cost="{{ c.color_cost }}">{{ c.color }} &ndash; &#36;{{ c.color_cost }}</option>
+              {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      {% if finishes %}
+      <div class="form-group">
+        <label>Finish</label>
+        <select id="finish_select" name="finish" class="form-control">
+              {% for f in finishes %}
+               <option value="{{ f.id }}" data-cost="{{ f.finish_cost }}" name="finish_id">{{ f.finish }} &ndash; &#36;{{ f.finish_cost }}</option>
+              {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      {% if can_be_round %}
+        <div class="checkbox checkbox-success">
+          <input id="rounded_checkbox" type="checkbox" name="rounded" class="styled">
+          <label for="rounded_checkbox">
+              Check box for rounded corners
+          </label>
+        </div>
+        <br/>
+        <p>Rounded {{ product.category.category_name }} cost ${{ rounded_cost }} more per unit<p>
+      {% endif %}
+
+
+      <!--h3 id="cost_label">Final Cost: $0.00</h3-->
+
+    <input type="submit" value="Add to Cart" class="btn btn-primary" style="float:right;" />
+    <a href="/" class="btn btn-warning" style="float:left;">Go Back</a>
+</form>
+</div>
+</div>
+
+<script type="text/javascript">
+var final_cost = 0
+
+  $("#quantity_select, #color_select, #turnaround_select, #finish_select").change(function() {
+    var quantity_cost = parseFloat($("#quantity_select").find(':selected').data('cost'));
+    var color_cost = parseFloat($("#color_select").find(':selected').data('cost'));
+    var turnaround_cost = parseFloat($("#turnaround_select").find(':selected').data('cost'));
+    var finish_cost = parseFloat($("#finish_select").find(':selected').data('cost'));
+    console.log(quantity_cost + " " + color_cost + " " + turnaround_cost);
+    if(!isNaN(quantity_cost)) {
+      final_cost = final_cost + quantity_cost;
+    }
+    if(!isNaN(color_cost)) {
+      final_cost = final_cost + color_cost;
+    }
+    if(!isNaN(turnaround_cost)){
+      final_cost = final_cost + turnaround_cost;
+    }
+
+    if(!isNaN(finish_cost)) {
+      final_cost = final_cost + finish_cost;
+    }
+
+    $("#cost_label").text("Final Cost: $"+final_cost.toFixed(2));
+  });
+
+  $("#rounded_checkbox").change(function() {
+      if(this.checked) {
+      } else {
+
+      }
+  });
+
+</script>
+{% endblock %}
