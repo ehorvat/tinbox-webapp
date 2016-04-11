@@ -70,7 +70,7 @@ productSearch.on('input',function(e){
     unHideAllProducts();
     subproducts.each(function(){
       $(this).find("a p").each(function(){
-        if($(this).text().indexOf(input) >= 0){
+        if($(this).text().toLowerCase().indexOf(input.toLowerCase()) >= 0){
           $(this).parent().removeClass("hide");
         } else {
           $(this).parent().addClass("hide");
